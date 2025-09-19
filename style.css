@@ -1,0 +1,187 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+    box-sizing: border-box;
+}
+body{
+    background:rgb(26, 20, 20);
+}
+.card{
+    width: 100% ;
+    max-width: 95%;
+    background-color: rgb(8, 152, 97);
+    margin: 100px auto 0%;
+    border-radius: 20px;
+    border: solid black;
+    padding: 40px 35px;
+    text-align: center;
+    align-items: start;
+    height: auto;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 7px;
+}
+img{
+    height: 50px;
+}
+
+.search {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.search input{
+    border: 0;
+    outline: 0;
+    background-color: beige;
+    color: #555;
+    padding: 20px 30px;
+    height: 100%;
+    border-radius: 30px;
+    flex: 1;
+    margin-right: 10px;
+    width: 100%;
+    font-size: 20px;
+}
+.search button{
+    border: 0;
+    outline: 0;
+    background-color:white;
+    border-radius: 55%;
+    width: 60px;
+    height: 60px;
+}
+/* 💡 NEW CODE: Rule to properly size the search button image */
+.search button img {
+    width: 30px; 
+    height: 30px;
+}
+
+.weather-icon{
+    width: 170px;
+    height: 170px;
+    margin-top: 40px;
+}
+.weather h1{
+    font-size: 70px;
+    font-weight: 550;
+    color: white;
+}
+.weather h2{
+    font-size: 50px;
+    font-weight: 450;
+    margin-top: -10px;
+    color: white;
+}
+.details{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 20px;
+    margin-top: 50px;
+}
+.col{
+    display: flex;
+    align-items: center;
+    text-align: start;
+    color: rgb(240, 243, 255);
+    margin: 5px;
+}
+.col img{
+    width: 40px;
+    margin-right: 10px;
+}
+.humidity{
+    margin: 5px;
+}
+.weather{
+    display: none;
+}
+.error{
+    text-align: left;
+    margin-left: 10px;
+    font-size: 15px;
+    margin-top: 10px;
+    display: none;
+    color: yellow;
+}
+/* 💡 NEW CODE: Styles for Air Quality section */
+.air-quality {
+    margin-top: 40px;
+    text-align: center;
+    color: white;
+    display: none; /* Initially hides the section */
+}
+.aqi-value {
+    font-size: 40px;
+    font-weight: 600;
+}
+.aqi-description {
+    font-size: 20px;
+    font-weight: 400;
+}
+/* 💡 NEW CODE: Fixed syntax error and added responsive rule */
+@media (min-width: 768px) {
+    .card {
+        /* This rule now works correctly */
+    }
+} 
+.smart-messages{
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    font-size: 16px;
+    text-align: center;
+    display: none;
+}
+@media (max-width: 767px) {
+    /* Decreases the size of the main card */
+    .card {
+        padding: 20px 15px;
+    }
+.weather-icon {
+        width: 120px;
+        height: 120px;
+        margin-top: 20px;
+    }
+    .weather h1 {
+        font-size: 50px;
+    }
+    .weather h2 {
+        font-size: 30px;
+    }
+    .details {
+        margin-top: 30px;
+    }
+    .col img {
+        width: 30px;
+    }
+    .details p {
+        font-size: 14px;
+    }
+     .aqi-value {
+        font-size: 30px;
+    }
+    .aqi-description {
+        font-size: 16px;
+    }
+}
+.heading{
+    color: black;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: center;
+    background-color: rgb(150, 206, 229);
+    border: double rgb(202, 222, 51);
+    font-weight: 200;
+    font-family:'Times New Roman', Times, serif;
+    font-style: oblique;
+    font-stretch: ultra-expanded;
+    
+    
+}

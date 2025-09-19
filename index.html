@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Weather Report</title>
+     <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <div class="heading">
+      <p>YOUR WEATHER REPORT</p>
+   </div>
+   <div class="card">
+    <div class="search"> <input type="text" placeholder="Enter Your City name" spellcheck="false"> 
+       <button><img src="Images/search.png" alt="search"></button> 
+    </div>
+      <div class="error">
+         <p>Invalid City Name "Contact Developer-HARSHIT KALHER May be he think you misspelled the region."</p>
+      </div>
+    <div class="weather">
+      <div class="smart-messages">
+         <p></p>
+      </div>
+      <img src="Images/storm.png" class="weather-icon">
+      <h1 class="temp">25°c</h1>
+      <h2 class="city">Meerut</h2>
+       <div class="details">
+         <div class="col">
+            <img src="Images/humidity.png" alt="">
+         <div>
+         <p class="humidity">50%</p>
+         <p>humidity</p>
+       </div>
+    </div>
+    <div class="col">
+            <img src="Images/wind.png" alt="">
+         <div>
+         <p class="wind"> 20Km/hr</p>
+         <p>Wind Speed</p>
+       </div>
+    </div>
+   </div> 
+   
+   <div class="air-quality">
+        <h3>Air Quality Index (AQI)|(1-5)</h3>
+        <p class="aqi-value">Loading...</p>
+        <p class="aqi-description"></p>
+    </div>
+   <script>
+      const apikey = "f6410d0be503781578fb255a1cfd4a76";
+      const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+      
+      // 💡 NEW CODE: Define the API URL for Air Quality
+      const aqiApiUrl = "https://api.openweathermap.org/data/2.5/air_pollution?units=metric&";
+
+      const searchbox = document.querySelector(".search input");
+      const searchbtn = document.querySelector(".search button");
+      const weatherIcon = document.querySelector(".weather-icon");
+      
+      // 💡 NEW CODE: Get references to the new HTML elements
+      const aqiValue = document.querySelector(".aqi-value");
+      const aqiDesc = document.querySelector(".aqi-description");
+      const smartMessageDiv = document.querySelector(".smart-messages");
+
+      async function checkweather(city) {
+         const weatherResponse = await fetch(apiurl + city + `&appid=${apikey}`);
+
+         if ( weatherResponse.status == 404){
+            document.querySelector(".error").style.display = "block";
+             document.querySelector(".weather").style.display = "none";
+             // 💡 NEW CODE: Hide air quality section on error
+            document.querySelector(".air-quality").style.display = "none";
+            smartMessageDiv.style.display = "none";
+            return;
+         }
+         
+         var weatherData = await weatherResponse.json();
+         
+         document.querySelector(".city").innerHTML = weatherData.name;
+         document.querySelector(".temp").innerHTML = Math.round(weatherData.main.temp)+ "°c";
+         document.querySelector(".humidity").innerHTML = weatherData.main.humidity + "%";
+         document.querySelector(".wind").innerHTML = weatherData.wind.speed  + " km/h";
+         
+        // 💡 CORRECTED: This logic now checks for specific conditions first to avoid bugs.
+        // It uses 'weatherData' correctly and checks for temperature before general conditions.
+        if (weatherData.weather[0].main === "Clear" && weatherData.main.temp > 35) {
+            weatherIcon.src = "Images/hot.png";
+        } else if (weatherData.weather[0].main === "Clouds" && weatherData.main.temp > 35) {
+            weatherIcon.src = "Images/hot.png";
+        } else if (weatherData.weather[0].main === "Clear" && weatherData.main.temp < 6) {
+            weatherIcon.src = "Images/cold.png";
+        } else if (weatherData.weather[0].main === "Clouds" && weatherData.main.temp < 6) {
+            weatherIcon.src = "Images/cold.png";
+        } else if (weatherData.weather[0].main === "Rain" && weatherData.main.temp < 6) {
+            weatherIcon.src = "Images/cold.png";
+        } else if (weatherData.weather[0].main === "Clouds" && weatherData.wind.speed > 30) {
+            weatherIcon.src = "Images/storm.png";
+        } else if (weatherData.weather[0].main === "Rain" && weatherData.wind.speed > 30) {
+            weatherIcon.src = "Images/storm.png";
+        } else if (weatherData.weather[0].main === "Clouds") {
+            weatherIcon.src = "Images/clouds.png";
+        } else if (weatherData.weather[0].main === "Rain") {
+            weatherIcon.src = "Images/rain.png";
+        } else if (weatherData.weather[0].main === "Clear") {
+            weatherIcon.src = "Images/sun.png";
+        } else {
+            weatherIcon.src = "Images/clouds.png"; // Fallback icon
+        }
+         
+         // 💡 NEW CODE: Fetch Air Quality Data using coordinates
+         const lat = weatherData.coord.lat;
+         const lon = weatherData.coord.lon;
+         const aqiResponse = await fetch(`${aqiApiUrl}lat=${lat}&lon=${lon}&appid=${apikey}`);
+         const aqiData = await aqiResponse.json();
+         const aqi = aqiData.list[0].main.aqi;
+         
+         // 💡 NEW CODE: Display the AQI value and description
+         aqiValue.innerHTML = aqi;
+         
+         switch(aqi) {
+             case 1:
+                 aqiDesc.innerHTML = "Good";
+                 break;
+             case 2:
+                 aqiDesc.innerHTML = "Fair";
+                 break;
+             case 3:
+                 aqiDesc.innerHTML = "Moderate";
+                 break;
+             case 4:
+                 aqiDesc.innerHTML = "Poor";
+                 break;
+             case 5:
+                 aqiDesc.innerHTML = "Very Poor";
+                 break;
+             default:
+                 aqiDesc.innerHTML = "N/A";
+         }
+         let message = "";
+          if (weatherData.weather[0].main === "Clear" && weatherData.main.temp > 30){
+            message += "-Remember to apply sunscreen and stay hydrated!. <br>";
+          } if (weatherData.weather[0].main === "Rain"){
+            message += "-Looks like rain! Don't forget your umbrella. <br>";
+          } if (weatherData.weather[0].main === "Rain" && weatherData.wind.speed > 30){
+            message += "-May be a storm hit your city avoid outing if not necessary. <br>";
+          } if ((weatherData.weather[0].main === "Rain" || weatherData.weather[0].main === "Clouds") && weatherData.wind.speed > 30){
+            message += "-A storm is coming! It's a good idea to stay indoors and secure any loose items outside. Stay safe! <br>";
+          } if ( weatherData.main.temp > 30 && weatherData.main.humidity > 70 ){
+            message += "-Too hot!,Stay Hydrated. <br>";
+          } if (weatherData.weather[0].main === "Clear" && weatherData.main.humidity < 40) {
+            message += "-Enjoy the clear skies and fresh air! This is a great day for outdoor activities, but remember to use lip balm and moisturizer to prevent dry skin. <br>"
+          } if (weatherData.wind.speed > 25 && aqi >= 3) {
+            message += "-Strong winds are blowing. This can stir up pollutants, so it's a good day to stay indoors and keep windows closed, especially if you have respiratory issues. <br>"
+          } if (weatherData.main.temp < 6){
+            message += "-It's cold out there!wear warm clothes and don't forget your cap and scarf. <br>";
+          } if (weatherData.main.temp < 10 && weatherData.weather[0].main === "Rain") {
+            message += "-It's a chilly and damp day. Bundle up, grab a hot drink, and be careful of slippery roads if you're traveling. <br>"
+          } if (aqi >= 3){
+            message += "-Air quality is a concern. Consider wearing a mask, especially if you have allergies. <br>";
+          } if (message.length === 0) {
+            message += "-Everything seems to be fine, Enjoy the day.";
+          }
+         
+         smartMessageDiv.querySelector("p").innerHTML = message;
+         smartMessageDiv.style.display = "block"; 
+            
+
+         document.querySelector(".weather").style.display = "block";
+         // 💡 NEW CODE: Show the air quality section after a successful fetch
+         document.querySelector(".air-quality").style.display = "block";
+         document.querySelector(".error").style.display = "none";
+         }
+     
+      // 💡 CHANGE: The event listener now calls the existing function with the updated logic
+      searchbtn.addEventListener("click" , ()=>{
+            checkweather(searchbox.value);
+      })
+      
+   </script>
+</body>
+</html>
