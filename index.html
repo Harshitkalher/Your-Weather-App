@@ -147,7 +147,7 @@
             message += "-A storm is coming! It's a good idea to stay indoors and secure any loose items outside. Stay safe! <br>";
           } if ( weatherData.main.temp > 30 && weatherData.main.humidity > 70 ){
             message += "-Too hot!,Stay Hydrated. <br>";
-          } if (weatherData.weather[0].main === "Clear" && weatherData.main.humidity < 40) {
+          } if (weatherData.weather[0].main === "Clear" && weatherData.main.humidity < 40 && aqi < 3) {
             message += "-Enjoy the clear skies and fresh air! This is a great day for outdoor activities, but remember to use lip balm and moisturizer to prevent dry skin. <br>"
           } if (weatherData.wind.speed > 25 && aqi >= 3) {
             message += "-Strong winds are blowing. This can stir up pollutants, so it's a good day to stay indoors and keep windows closed, especially if you have respiratory issues. <br>"
@@ -178,4 +178,5 @@
       
    </script>
 </body>
+
 </html>
