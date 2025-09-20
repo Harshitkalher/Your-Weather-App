@@ -9,7 +9,6 @@ body{
 }
 .card{
     width: 100% ;
-    length: 100%;
     max-width: 95%;
     background-color: rgb(8, 152, 97);
     margin: 100px auto 0%;
@@ -186,4 +185,5 @@ img{
     
     
 }
+
 
