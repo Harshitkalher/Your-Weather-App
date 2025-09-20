@@ -53,7 +53,6 @@ img{
     width: 60px;
     height: 60px;
 }
-/* 💡 NEW CODE: Rule to properly size the search button image */
 .search button img {
     width: 30px; 
     height: 30px;
@@ -75,6 +74,7 @@ img{
     margin-top: -10px;
     color: white;
 }
+/* 💡 MODIFIED: The details section is now structured with two columns to hold the pairs of data. */
 .details{
     display: flex;
     align-items: center;
@@ -82,6 +82,13 @@ img{
     padding: 0 20px;
     margin-top: 50px;
 }
+/* 💡 NEW CODE: This is the new container for a single group (e.g., Humidity and Sunrise) */
+.col-group{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* 💡 MODIFIED: The col class now acts as the individual item within the new col-group. */
 .col{
     display: flex;
     align-items: center;
@@ -107,12 +114,11 @@ img{
     display: none;
     color: yellow;
 }
-/* 💡 NEW CODE: Styles for Air Quality section */
 .air-quality {
     margin-top: 40px;
     text-align: center;
     color: white;
-    display: none; /* Initially hides the section */
+    display: none;
 }
 .aqi-value {
     font-size: 40px;
@@ -122,12 +128,6 @@ img{
     font-size: 20px;
     font-weight: 400;
 }
-/* 💡 NEW CODE: Fixed syntax error and added responsive rule */
-@media (min-width: 768px) {
-    .card {
-        /* This rule now works correctly */
-    }
-} 
 .smart-messages{
     background-color: rgba(255, 255, 255, 0.8);
     color: black;
@@ -139,12 +139,20 @@ img{
     text-align: center;
     display: none;
 }
+/* 💡 MODIFIED: The sunrise-icon and sunset-icon classes were moved to the top-level CSS. */
+.sunrise-icon, .sunset-icon {
+    width: 40px;
+    margin-right: 10px;
+}
+.sunrise-time, .sunset-time {
+    margin: 5px;
+}
+
 @media (max-width: 767px) {
-    /* Decreases the size of the main card */
     .card {
         padding: 20px 15px;
     }
-.weather-icon {
+    .weather-icon {
         width: 120px;
         height: 120px;
         margin-top: 20px;
@@ -185,14 +193,8 @@ img{
     
     
 }
-
-.sunrise-icon, .sunset-icon {
-    width: 40px;
-    margin-right: 10px;
+@media (min-width: 768px) {
+    .card {
+         
+    }
 }
-.sunrise-time, .sunset-time {
-    margin: 5px;
-}
-
-
-
