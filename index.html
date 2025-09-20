@@ -159,7 +159,7 @@
             message += "-little cloudy,may be a chance of rain,do hurry. <br>";
           } if (weatherData.weather[0].main === "Rain"){
             message += "-Looks like rain! Don't forget your umbrella. <br>";
-          } if (humidity >80) {
+          } if (weatherData.main.humidity >80) {
             message += "-It's very humid. be prepared for a muggy day. <br>"  
         
           } if (message.length === 0) {
@@ -185,6 +185,7 @@
 </body>
 
 </html>
+
 
 
 
