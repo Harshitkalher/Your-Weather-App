@@ -186,4 +186,13 @@ img{
     
 }
 
+.sunrise-icon, .sunset-icon {
+    width: 40px;
+    margin-right: 10px;
+}
+.sunrise-time, .sunset-time {
+    margin: 5px;
+}
+
+
 
