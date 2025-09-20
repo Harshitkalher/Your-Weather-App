@@ -139,10 +139,6 @@
          let message = "";
           if (weatherData.weather[0].main === "Clear" && weatherData.main.temp > 30){
             message += "-Remember to apply sunscreen and stay hydrated!. <br>";
-          } if (weatherData.weather[0].main === "Clouds"){
-            message += "-little cloudy,may be a chance of rain,do hurry. <br>";
-          } if (weatherData.weather[0].main === "Rain"){
-            message += "-Looks like rain! Don't forget your umbrella. <br>";
           } if (weatherData.weather[0].main === "Rain" && weatherData.wind.speed > 30){
             message += "-May be a storm hit your city avoid outing if not necessary. <br>";
           } if ((weatherData.weather[0].main === "Rain" || weatherData.weather[0].main === "Clouds") && weatherData.wind.speed > 30){
@@ -159,6 +155,10 @@
             message += "-It's a chilly and damp day. Bundle up, grab a hot drink, and be careful of slippery roads if you're traveling. <br>"
           } if (aqi >= 3){
             message += "-Air quality is a concern. Consider wearing a mask, especially if you have allergies. <br>";
+          } if (weatherData.weather[0].main === "Clouds"){
+            message += "-little cloudy,may be a chance of rain,do hurry. <br>";
+          } if (weatherData.weather[0].main === "Rain"){
+            message += "-Looks like rain! Don't forget your umbrella. <br>";
           } if (message.length === 0) {
             message += "-Everything seems to be fine, Enjoy the day.";
           }
@@ -182,4 +182,5 @@
 </body>
 
 </html>
+
 
