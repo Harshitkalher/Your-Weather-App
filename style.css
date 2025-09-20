@@ -59,13 +59,13 @@ img{
 }
 
 .weather-icon{
-    width: 170px;
-    height: 170px;
-    margin-top: 40px;
+    width: 140px;
+    height: 140px;
+    margin-top: 30px;
 }
 .weather h1{
-    font-size: 70px;
-    font-weight: 550;
+    font-size: 50px;
+    font-weight: 440px;
     color: white;
 }
 .weather h2{
@@ -198,5 +198,6 @@ img{
          
     }
 }
+
 
 
