@@ -64,29 +64,26 @@
     </div>
 
    <script>
-      const apikey = "zpka_342d9a212a8648a9962dfc290ce0dec8_459770f8"; 
       const openWeatherApiKey = "f6410d0be503781578fb255a1cfd4a76";
-      const aqiApiUrl = "https://api.openweathermap.org/data/2.5/air_pollution?units=metric&";
       const openWeatherApiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&";
+      const aqiApiUrl = "https://api.openweathermap.org/data/2.5/air_pollution?units=metric&";
 
       const searchbox = document.querySelector(".search input");
       const searchbtn = document.querySelector(".search button");
       const weatherIcon = document.querySelector(".weather-icon");
       const aqiValue = document.querySelector(".aqi-value");
       const aqiDesc = document.querySelector(".aqi-description");
-      // 💡 MODIFIED: Changed the class to match the CSS.
       const smartMessageDiv = document.querySelector(".smart-messages");
-      
       const sunriseTimeDiv = document.querySelector(".sunrise-time");
       const sunsetTimeDiv = document.querySelector(".sunset-time");
 
       async function checkweather(city) {
          try {
-            const locationUrl = https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apikey}&q=${city};
-            const locationResponse = await fetch(locationUrl);
-            const locationData = await locationResponse.json();
-
-            if (!locationResponse.ok || locationData.length === 0) {
+            // First, get basic weather data and coordinates
+            const weatherResponse = await fetch(`${openWeatherApiUrl}q=${city}&appid=${openWeatherApiKey}`);
+            const openWeatherData = await weatherResponse.json();
+            
+            if (!weatherResponse.ok) {
                document.querySelector(".error").style.display = "block";
                document.querySelector(".weather").style.display = "none";
                document.querySelector(".air-quality").style.display = "none";
@@ -94,24 +91,19 @@
                return;
             }
 
-            const locationKey = locationData[0].Key;
-            const lat = locationData[0].GeoPosition.Latitude;
-            const lon = locationData[0].GeoPosition.Longitude;
-           
-            const weatherUrl = https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${apikey}&details=true;
-            const weatherResponse = await fetch(weatherUrl);
-            const weatherData = await weatherResponse.json();
-            const currentConditions = weatherData[0];
+            const lat = openWeatherData.coord.lat;
+            const lon = openWeatherData.coord.lon;
+            const weatherText = openWeatherData.weather[0].description.toLowerCase();
+            const temp = openWeatherData.main.temp;
+            const wind = openWeatherData.wind.speed;
+            const humidity = openWeatherData.main.humidity;
 
-            document.querySelector(".city").innerHTML = locationData[0].LocalizedName;
-            document.querySelector(".temp").innerHTML = Math.round(currentConditions.Temperature.Metric.Value) + "°c";
-            document.querySelector(".humidity").innerHTML = currentConditions.RelativeHumidity + "%";
-            document.querySelector(".wind").innerHTML = Math.round(currentConditions.Wind.Speed.Metric.Value) + " km/h";
+            document.querySelector(".city").innerHTML = openWeatherData.name;
+            document.querySelector(".temp").innerHTML = Math.round(temp) + "°c";
+            document.querySelector(".humidity").innerHTML = humidity + "%";
+            document.querySelector(".wind").innerHTML = Math.round(wind) + " km/h";
             
-            const openWeatherResponse = await fetch(${openWeatherApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey});
-            const openWeatherData = await openWeatherResponse.json();
-
-            // 💡 MODIFIED: The toLocaleTimeString() now formats the time in a simpler way.
+            // Get sunrise and sunset times
             const sunrise = new Date(openWeatherData.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const sunset = new Date(openWeatherData.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
@@ -121,11 +113,6 @@
             const currentTime = new Date();
             const isDayTime = currentTime > new Date(openWeatherData.sys.sunrise * 1000) && currentTime < new Date(openWeatherData.sys.sunset * 1000);
             
-            const weatherText = currentConditions.WeatherText.toLowerCase();
-            const temp = currentConditions.Temperature.Metric.Value;
-            const wind = currentConditions.Wind.Speed.Metric.Value;
-            const humidity = currentConditions.RelativeHumidity;
-
             // Corrected Icon Logic
             if ((weatherText.includes("sun") || weatherText.includes("clear")) && isDayTime) {
                 weatherIcon.src = "Images/sun.png";
@@ -151,7 +138,8 @@
                 weatherIcon.src = "Images/clouds.png";
             }
             
-            const aqiResponse = await fetch(${aqiApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey});
+            // Fetch Air Quality Index
+            const aqiResponse = await fetch(`${aqiApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey}`);
             const aqiData = await aqiResponse.json();
             const aqi = aqiData.list[0].main.aqi;
 
