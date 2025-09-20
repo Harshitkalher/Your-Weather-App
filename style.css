@@ -94,7 +94,7 @@ img{
     align-items: center;
     text-align: start;
     color: rgb(240, 243, 255);
-    margin: 5px;
+    margin: 12px;
 }
 .col img{
     width: 40px;
@@ -198,4 +198,5 @@ img{
          
     }
 }
+
 
