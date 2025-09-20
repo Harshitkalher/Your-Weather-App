@@ -121,10 +121,12 @@
             // Corrected Icon Logic
             if ((weatherText.includes("sun") || weatherText.includes("clear")) && isDayTime) {
                 weatherIcon.src = "Images/sun.png";
-            } else if ((weatherText.includes("sun") || weatherText.includes("clear")) && !isDayTime) {
-                weatherIcon.src = "Images/moon.png";
+            } else if ((weatherText.includes("sun") || weatherText.includes("clear") || weatherText.includes("moon")) && !isDayTime){
+                weatherIcon.src = "Images/window.png";
+            } else if ((weatherText.includes("sun") || weatherText.includes("clear") || weatherText.includes("moon")) && !isDayTime && temp > 35){
+                weatherIcon.src = "Images/temperature.png";
             } else if ((weatherText.includes("cloud") || weatherText.includes("hazy") || weatherText.includes("overcast")) && !isDayTime) {
-                weatherIcon.src = "Images/moon-clouds.png"; 
+                weatherIcon.src = "Images/cloudy-night.png"; 
             } else if ((weatherText.includes("cloud") || weatherText.includes("hazy") || weatherText.includes("overcast")) && isDayTime) {
                 weatherIcon.src = "Images/clouds.png";
             } else if ((weatherText.includes("rain") || weatherText.includes("drizzle")) && !isDayTime) {
@@ -169,7 +171,7 @@
 
             let message = "";
             if ((weatherText.includes("sun") || weatherText.includes("clear")) && temp > 30 && isDayTime) {
-               message += "Remember to apply sunscreen and stay hydrated!<br>";
+               message += "Sunny day!Remember to apply sunscreen. <br>";
             } if ((weatherText.includes("rain")) && wind > 30){
                message += "-May be a storm hit your city avoid outing if not necessary. <br>";
              } if ((weatherText.includes("rain") || weatherText.includes("cloud")) && wind > 30){
@@ -225,5 +227,6 @@
    </script>
 </body>
 </html>
+
 
 
