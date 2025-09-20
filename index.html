@@ -37,14 +37,14 @@
        </div>
     </div>
     <div class="col">
-        <img src="Images/sunrise.png" class="sunrise-icon">
+        <img src="Images/sun.png" class="sunrise-icon">
         <div>
             <p class="sunrise-time">--:--</p>
             <p>Sunrise</p>
         </div>
     </div>
     <div class="col">
-        <img src="Images/sunset.png" class="sunset-icon">
+        <img src="Images/moon.png" class="sunset-icon">
         <div>
             <p class="sunset-time">--:--</p>
             <p>Sunset</p>
@@ -75,154 +75,148 @@
       const sunsetTimeDiv = document.querySelector(".sunset-time");
 
       async function checkweather(city) {
-         const locationUrl = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apikey}&q=${city}`;
-         const locationResponse = await fetch(locationUrl);
-         const locationData = await locationResponse.json();
+         try {
+            const locationUrl = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apikey}&q=${city}`;
+            const locationResponse = await fetch(locationUrl);
+            const locationData = await locationResponse.json();
 
-         if (!locationResponse.ok || locationData.length === 0) {
-            document.querySelector(".error").style.display = "block";
-            document.querySelector(".weather").style.display = "none";
-            document.querySelector(".air-quality").style.display = "none";
-            smartMessageDiv.style.display = "none";
-            return;
-         }
-
-         const locationKey = locationData[0].Key;
-         const lat = locationData[0].GeoPosition.Latitude;
-         const lon = locationData[0].GeoPosition.Longitude;
-        
-         const weatherUrl = `https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${apikey}&details=true`;
-         const weatherResponse = await fetch(weatherUrl);
-         const weatherData = await weatherResponse.json();
-         const currentConditions = weatherData[0];
-
-         document.querySelector(".city").innerHTML = locationData[0].LocalizedName;
-         document.querySelector(".temp").innerHTML = Math.round(currentConditions.Temperature.Metric.Value) + "°c";
-         document.querySelector(".humidity").innerHTML = currentConditions.RelativeHumidity + "%";
-         document.querySelector(".wind").innerHTML = Math.round(currentConditions.Wind.Speed.Metric.Value) + " km/h";
-         
-         const openWeatherResponse = await fetch(`${openWeatherApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey}`);
-         const openWeatherData = await openWeatherResponse.json();
-
-         const sunrise = new Date(openWeatherData.sys.sunrise * 1000).toLocaleTimeString();
-         const sunset = new Date(openWeatherData.sys.sunset * 1000).toLocaleTimeString();
-         sunriseTimeDiv.innerHTML = sunrise;
-         sunsetTimeDiv.innerHTML = sunset;
-
-         const currentTime = new Date();
-         const isDayTime = currentTime > new Date(openWeatherData.sys.sunrise * 1000) && currentTime < new Date(openWeatherData.sys.sunset * 1000);
-         
-         const weatherText = currentConditions.WeatherText.toLowerCase();
-
-         if (weatherText.includes("sun") || weatherText.includes("clear")) {
-            if (isDayTime) {
-                weatherIcon.src = "Images/sun.png";
-            } else {
-                weatherIcon.src = "Images/window.png";
+            if (!locationResponse.ok || locationData.length === 0) {
+               document.querySelector(".error").style.display = "block";
+               document.querySelector(".weather").style.display = "none";
+               document.querySelector(".air-quality").style.display = "none";
+               smartMessageDiv.style.display = "none";
+               return;
             }
-         } else if ((weatherText.includes("cloud") || weatherText.includes("hazy") || weatherText.includes("overcast")) && !isDayTime) {
-             weatherIcon.src = "Images/cloudy-night.png"; 
-         } else if ((weatherText.includes("cloud") || weatherText.includes("clear") || weatherText.includes("overcast")) && !isDayTime && temp > 35) {
-             weatherIcon.src = "Images/temperature.png"; 
-         } else if ((weatherText.includes("Rain") && !isDayTime) {
-             weatherIcon.src = "Images/stormy.png";
-         } else if (weatherData.weather[0].main === "Clear" && weatherData.main.temp > 35) {
-            weatherIcon.src = "Images/hot.png";
-         } else if (weatherData.weather[0].main === "Clouds" && weatherData.main.temp > 35) {
-            weatherIcon.src = "Images/hot.png";
-         } else if (weatherData.weather[0].main === "Clear" && weatherData.main.temp < 6) {
-            weatherIcon.src = "Images/cold.png";
-         } else if (weatherData.weather[0].main === "Clouds" && weatherData.main.temp < 6) {
-            weatherIcon.src = "Images/cold.png";
-         } else if (weatherData.weather[0].main === "Rain" && weatherData.main.temp < 6) {
-            weatherIcon.src = "Images/cold.png";
-         } else if (weatherData.weather[0].main === "Clouds" && weatherData.wind.speed > 30) {
-            weatherIcon.src = "Images/storm.png";
-         } else if (weatherData.weather[0].main === "Rain" && weatherData.wind.speed > 30) {
-            weatherIcon.src = "Images/storm.png";
-         } else if (weatherData.weather[0].main === "Clouds") {
-            weatherIcon.src = "Images/clouds.png";
-         } else if (weatherData.weather[0].main === "Rain") {
-            weatherIcon.src = "Images/rain.png";
-         } else if (weatherData.weather[0].main === "Clear") {
-            weatherIcon.src = "Images/sun.png";
-         } else {
-            weatherIcon.src = "Images/clouds.png"; // Fallback icon
-        }
-         
-         const aqiResponse = await fetch(`${aqiApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey}`);
-         const aqiData = await aqiResponse.json();
-         const aqi = aqiData.list[0].main.aqi;
 
-         aqiValue.innerHTML = aqi;
+            const locationKey = locationData[0].Key;
+            const lat = locationData[0].GeoPosition.Latitude;
+            const lon = locationData[0].GeoPosition.Longitude;
+           
+            const weatherUrl = `https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${apikey}&details=true`;
+            const weatherResponse = await fetch(weatherUrl);
+            const weatherData = await weatherResponse.json();
+            const currentConditions = weatherData[0];
 
-         switch (aqi) {
-             case 1:
-                 aqiDesc.innerHTML = "Good";
-                 break;
-             case 2:
-                 aqiDesc.innerHTML = "Fair";
-                 break;
-             case 3:
-                 aqiDesc.innerHTML = "Moderate";
-                 break;
-             case 4:
-                 aqiDesc.innerHTML = "Poor";
-                 break;
-             case 5:
-                 aqiDesc.innerHTML = "Very Poor";
-                 break;
-             default:
-                 aqiDesc.innerHTML = "N/A";
+            document.querySelector(".city").innerHTML = locationData[0].LocalizedName;
+            document.querySelector(".temp").innerHTML = Math.round(currentConditions.Temperature.Metric.Value) + "°c";
+            document.querySelector(".humidity").innerHTML = currentConditions.RelativeHumidity + "%";
+            document.querySelector(".wind").innerHTML = Math.round(currentConditions.Wind.Speed.Metric.Value) + " km/h";
+            
+            const openWeatherResponse = await fetch(`${openWeatherApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey}`);
+            const openWeatherData = await openWeatherResponse.json();
+
+            const sunrise = new Date(openWeatherData.sys.sunrise * 1000).toLocaleTimeString();
+            const sunset = new Date(openWeatherData.sys.sunset * 1000).toLocaleTimeString();
+            sunriseTimeDiv.innerHTML = sunrise;
+            sunsetTimeDiv.innerHTML = sunset;
+
+            const currentTime = new Date();
+            const isDayTime = currentTime > new Date(openWeatherData.sys.sunrise * 1000) && currentTime < new Date(openWeatherData.sys.sunset * 1000);
+            
+            const weatherText = currentConditions.WeatherText.toLowerCase();
+            const temp = currentConditions.Temperature.Metric.Value;
+            const wind = currentConditions.Wind.Speed.Metric.Value;
+            const humidity = currentConditions.RelativeHumidity;
+
+            // Corrected Icon Logic
+            if ((weatherText.includes("sun") || weatherText.includes("clear")) && isDayTime) {
+                weatherIcon.src = "Images/sun.png";
+            } else if ((weatherText.includes("sun") || weatherText.includes("clear")) && !isDayTime) {
+                weatherIcon.src = "Images/moon.png";
+            } else if ((weatherText.includes("cloud") || weatherText.includes("hazy") || weatherText.includes("overcast")) && !isDayTime) {
+                weatherIcon.src = "Images/moon-clouds.png"; 
+            } else if ((weatherText.includes("cloud") || weatherText.includes("hazy") || weatherText.includes("overcast")) && isDayTime) {
+                weatherIcon.src = "Images/clouds.png";
+            } else if ((weatherText.includes("rain") || weatherText.includes("drizzle")) && !isDayTime) {
+                weatherIcon.src = "Images/stormy.png";
+            } else if (temp > 35) {
+                weatherIcon.src = "Images/hot.png";
+            } else if (temp < 6) {
+                weatherIcon.src = "Images/cold.png";
+            } else if (wind > 30) {
+                weatherIcon.src = "Images/storm.png";
+            } else if (weatherText.includes("rain")) {
+                weatherIcon.src = "Images/rain.png";
+            } else {
+                weatherIcon.src = "Images/clouds.png";
+            }
+            
+            const aqiResponse = await fetch(`${aqiApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey}`);
+            const aqiData = await aqiResponse.json();
+            const aqi = aqiData.list[0].main.aqi;
+
+            aqiValue.innerHTML = aqi;
+
+            switch (aqi) {
+                case 1:
+                    aqiDesc.innerHTML = "Good";
+                    break;
+                case 2:
+                    aqiDesc.innerHTML = "Fair";
+                    break;
+                case 3:
+                    aqiDesc.innerHTML = "Moderate";
+                    break;
+                case 4:
+                    aqiDesc.innerHTML = "Poor";
+                    break;
+                case 5:
+                    aqiDesc.innerHTML = "Very Poor";
+                    break;
+                default:
+                    aqiDesc.innerHTML = "N/A";
+            }
+
+            let message = "";
+            if ((weatherText.includes("sun") || weatherText.includes("clear")) && temp > 30 && isDayTime) {
+               message += "Remember to apply sunscreen and stay hydrated!<br>";
+            } if ((weatherText.includes("rain")) && wind > 30){
+               message += "-May be a storm hit your city avoid outing if not necessary. <br>";
+             } if ((weatherText.includes("rain") || weatherText.includes("cloud")) && wind > 30){
+               message += "-A storm is coming! It's a good idea to stay indoors and secure any loose items outside. Stay safe! <br>";
+             } if ( temp > 30 && humidity > 70 ){
+               message += "-Too hot!,Stay Hydrated. <br>";
+             } if ((weatherText.includes("clear") || weatherText.includes("sun")) && humidity < 40 && aqi < 3) {
+               message += "-Enjoy the clear skies and fresh air! This is a great day for outdoor activities, but remember to use lip balm and moisturizer to prevent dry skin. <br>";
+             } if (wind > 25 && aqi >= 3) {
+               message += "-Strong winds are blowing. This can stir up pollutants, so it's a good day to stay indoors and keep windows closed, especially if you have respiratory issues. <br>";
+             } if (temp < 6){
+               message += "-It's cold out there!wear warm clothes and don't forget your cap and scarf. <br>";
+             } if (temp < 10 && (weatherText.includes("rain"))) {
+               message += "-It's a chilly and damp day. Bundle up, grab a hot drink, and be careful of slippery roads if you're traveling. <br>";
+             } if (aqi >= 3){
+               message += "-Air quality is a concern. Consider wearing a mask, especially if you have allergies. <br>";
+             } if (weatherText.includes("cloud")){
+               message += "-little cloudy,may be a chance of rain,do hurry. <br>";
+             } if ((weatherText.includes("rain"))){
+               message += "-Looks like rain! Don't forget your umbrella. <br>";
+             } if (humidity >80) {
+               message += "-as It's very humid.Be ready for a muggy or rainy day. <br>";
+             } if ((weatherText.includes("haze"))) {
+               message += "-It's a bit hazy today. Air quality might be affected. <br>";
+             } if ((weatherText.includes("fog"))) {
+               message += "-Visibility is low due to fog. Drive carefully and use your low-beam headlights.<br>";
+             } if ((weatherText.includes("mist"))){
+               message += "-Visibility is low due to fog. Drive carefully and use your low-beam headlights.<br>";
+             } if ((weatherText.includes("clear") || weatherText.includes("sun")) && temp < 10) {
+               message += "-A beautiful but cold day awaits.Enjoy the clear skies, but remember to bundle up and protect your skin from the cold wind. <br>";
+             } if (message.length === 0) {
+               message += "-Everything seems to be fine, Enjoy the day.";
+             }
+            
+            smartMessageDiv.querySelector("p").innerHTML = message;
+            smartMessageDiv.style.display = "block";
+
+            document.querySelector(".weather").style.display = "block";
+            document.querySelector(".air-quality").style.display = "block";
+            document.querySelector(".error").style.display = "none";
+         } catch (error) {
+             document.querySelector(".error").style.display = "block";
+             document.querySelector(".error p").innerHTML = "Error fetching data. Please check the city name and try again.";
+             document.querySelector(".weather").style.display = "none";
+             document.querySelector(".air-quality").style.display = "none";
+             smartMessageDiv.style.display = "none";
          }
-
-         let message = "";
-         const temp = currentConditions.Temperature.Metric.Value;
-         const humidity = currentConditions.RelativeHumidity;
-         const wind = currentConditions.Wind.Speed.Metric.Value;
-
-         if ((weatherText.includes("sun") || weatherText.includes("clear")) && temp > 30 && isDayTime) {
-            message += "Remember to apply sunscreen and stay hydrated!<br>";
-         } if (weatherText.includes("rain") && wind > 30){
-            message += "-May be a storm hit your city avoid outing if not necessary. <br>";
-          } if (weatherText.includes("rain") || (weatherText.includes("cloud")) && wind > 30){
-            message += "-A storm is coming! It's a good idea to stay indoors and secure any loose items outside. Stay safe! <br>";
-          } if ( temp > 30 && humidity > 70 ){
-            message += "-Too hot!,Stay Hydrated. <br>";
-          } if (weatherText.includes("clear") || weatherText.includes("sun")) && humidity < 40 && aqi < 3) {
-            message += "-Enjoy the clear skies and fresh air! This is a great day for outdoor activities, but remember to use lip balm and moisturizer to prevent dry skin. <br>"
-          } if (wind > 25 && aqi >= 3) {
-            message += "-Strong winds are blowing. This can stir up pollutants, so it's a good day to stay indoors and keep windows closed, especially if you have respiratory issues. <br>"
-          } if (temp < 6){
-            message += "-It's cold out there!wear warm clothes and don't forget your cap and scarf. <br>";
-          } if (temp < 10 && (weatherText.includes("rain")) {
-            message += "-It's a chilly and damp day. Bundle up, grab a hot drink, and be careful of slippery roads if you're traveling. <br>"
-          } if (aqi >= 3){
-            message += "-Air quality is a concern. Consider wearing a mask, especially if you have allergies. <br>";
-          } if (weatherText.includes("cloud")){
-            message += "-little cloudy,may be a chance of rain,do hurry. <br>";
-          } if ((weatherText.includes("rain")){
-            message += "-Looks like rain! Don't forget your umbrella. <br>";
-          } if (humidity >80) {
-            message += "-as It's very humid.Be ready for a muggy or rainy day. <br>";
-          } if ((weatherText.includes("haze")) {
-            message += "-It's a bit hazy today. Air quality might be affected. <br>";
-          } if ((weatherText.includes("fog")) {
-            message += "-Visibility is low due to fog. Drive carefully and use your low-beam headlights.<br>";
-          } if ((weatherText.includes("mist")) {
-            message += "-Visibility is low due to fog. Drive carefully and use your low-beam headlights.<br>";
-          } if ((weatherText.includes("clear") || weatherText.includes("sun")) && temp < 10) {
-            message += "-A beautiful but cold day awaits.Enjoy the clear skies, but remember to bundle up and protect your skin from the cold wind. <br>";
-          } if (message.length === 0) {
-            message += "-Everything seems to be fine, Enjoy the day.";
-          }
-         
-         smartMessageDiv.querySelector("p").innerHTML = message;
-         smartMessageDiv.style.display = "block";
-
-         document.querySelector(".weather").style.display = "block";
-         document.querySelector(".air-quality").style.display = "block";
-         document.querySelector(".error").style.display = "none";
       }
 
       searchbtn.addEventListener("click", () => {
