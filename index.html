@@ -15,42 +15,47 @@
          <p>Invalid City Name "Contact Developer-HARSHIT KALHER but first check spelling of the region you type"</p>
       </div>
     <div class="weather">
-      <div class="smart-message">
+      <div class="smart-messages">
          <p></p>
       </div>
       <img src="Images/storm.png" class="weather-icon">
       <h1 class="temp">25°c</h1>
       <h2 class="city">Meerut</h2>
+       
        <div class="details">
-         <div class="col">
-            <img src="Images/humidity.png" alt="">
-         <div>
-         <p class="humidity">50%</p>
-         <p>humidity</p>
-       </div>
-    </div>
-    <div class="col">
-            <img src="Images/wind.png" alt="">
-         <div>
-         <p class="wind"> 20Km/hr</p>
-         <p>Wind Speed</p>
-       </div>
-    </div>
-    <div class="col">
-        <img src="Images/sunrise.png" class="sunrise-icon">
-        <div>
-            <p class="sunrise-time">--:--</p>
-            <p>Sunrise</p>
-        </div>
-    </div>
-    <div class="col">
-        <img src="Images/sunset.png" class="sunset-icon">
-        <div>
-            <p class="sunset-time">--:--</p>
-            <p>Sunset</p>
-        </div>
-    </div>
-   </div> 
+         <div class="col-group">
+            <div class="col">
+               <img src="Images/humidity.png" alt="">
+               <div>
+                  <p class="humidity">50%</p>
+                  <p>Humidity</p>
+               </div>
+            </div>
+            <div class="col">
+               <img src="Images/sunrise.png" alt="" class="sunrise-icon">
+               <div>
+                  <p class="sunrise-time">--:--</p>
+                  <p>Sunrise</p>
+               </div>
+            </div>
+         </div>
+         <div class="col-group">
+            <div class="col">
+               <img src="Images/wind.png" alt="">
+               <div>
+                  <p class="wind"> 20Km/hr</p>
+                  <p>Wind Speed</p>
+               </div>
+            </div>
+            <div class="col">
+               <img src="Images/sunset.png" alt="" class="sunset-icon">
+               <div>
+                  <p class="sunset-time">--:--</p>
+                  <p>Sunset</p>
+               </div>
+            </div>
+         </div>
+       </div> 
    
     <div class="air-quality">
         <h3>Air Quality Index (AQI)</h3>
@@ -69,14 +74,15 @@
       const weatherIcon = document.querySelector(".weather-icon");
       const aqiValue = document.querySelector(".aqi-value");
       const aqiDesc = document.querySelector(".aqi-description");
-      const smartMessageDiv = document.querySelector(".smart-message");
+      // 💡 MODIFIED: Changed the class to match the CSS.
+      const smartMessageDiv = document.querySelector(".smart-messages");
       
       const sunriseTimeDiv = document.querySelector(".sunrise-time");
       const sunsetTimeDiv = document.querySelector(".sunset-time");
 
       async function checkweather(city) {
          try {
-            const locationUrl = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apikey}&q=${city}`;
+            const locationUrl = https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apikey}&q=${city};
             const locationResponse = await fetch(locationUrl);
             const locationData = await locationResponse.json();
 
@@ -92,7 +98,7 @@
             const lat = locationData[0].GeoPosition.Latitude;
             const lon = locationData[0].GeoPosition.Longitude;
            
-            const weatherUrl = `https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${apikey}&details=true`;
+            const weatherUrl = https://dataservice.accuweather.com/currentconditions/v1/${locationKey}?apikey=${apikey}&details=true;
             const weatherResponse = await fetch(weatherUrl);
             const weatherData = await weatherResponse.json();
             const currentConditions = weatherData[0];
@@ -102,11 +108,13 @@
             document.querySelector(".humidity").innerHTML = currentConditions.RelativeHumidity + "%";
             document.querySelector(".wind").innerHTML = Math.round(currentConditions.Wind.Speed.Metric.Value) + " km/h";
             
-            const openWeatherResponse = await fetch(`${openWeatherApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey}`);
+            const openWeatherResponse = await fetch(${openWeatherApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey});
             const openWeatherData = await openWeatherResponse.json();
 
-            const sunrise = new Date(openWeatherData.sys.sunrise * 1000).toLocaleTimeString();
-            const sunset = new Date(openWeatherData.sys.sunset * 1000).toLocaleTimeString();
+            // 💡 MODIFIED: The toLocaleTimeString() now formats the time in a simpler way.
+            const sunrise = new Date(openWeatherData.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const sunset = new Date(openWeatherData.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
             sunriseTimeDiv.innerHTML = sunrise;
             sunsetTimeDiv.innerHTML = sunset;
 
@@ -143,7 +151,7 @@
                 weatherIcon.src = "Images/clouds.png";
             }
             
-            const aqiResponse = await fetch(`${aqiApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey}`);
+            const aqiResponse = await fetch(${aqiApiUrl}lat=${lat}&lon=${lon}&appid=${openWeatherApiKey});
             const aqiData = await aqiResponse.json();
             const aqi = aqiData.list[0].main.aqi;
 
@@ -227,7 +235,3 @@
    </script>
 </body>
 </html>
-
-
-
-
