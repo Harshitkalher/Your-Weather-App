@@ -12,7 +12,7 @@
        <button><img src="Images/search.png" alt="search"></button> 
     </div>
       <div class="error">
-         <p>Invalid City Name "Contact Developer-HARSHIT KALHER why He not provide your city.."</p>
+         <p>Invalid City Name "Contact Developer-HARSHIT KALHER but first check spelling of the region you type"</p>
       </div>
     <div class="weather">
       <div class="smart-message">
@@ -175,7 +175,7 @@
              } if ((weatherText.includes("rain") || weatherText.includes("cloud")) && wind > 30){
                message += "-A storm is coming! It's a good idea to stay indoors and secure any loose items outside. Stay safe! <br>";
              } if ( temp > 30 && humidity > 70 ){
-               message += "-Too hot!,Stay Hydrated. <br>";
+               message += "-warm day!,Stay Hydrated. <br>";
              } if ((weatherText.includes("clear") || weatherText.includes("sun")) && humidity < 40 && aqi < 3) {
                message += "-Enjoy the clear skies and fresh air! This is a great day for outdoor activities, but remember to use lip balm and moisturizer to prevent dry skin. <br>";
              } if (wind > 25 && aqi >= 3) {
@@ -225,4 +225,5 @@
    </script>
 </body>
 </html>
+
 
