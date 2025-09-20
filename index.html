@@ -155,10 +155,13 @@
             message += "-It's a chilly and damp day. Bundle up, grab a hot drink, and be careful of slippery roads if you're traveling. <br>"
           } if (aqi >= 3){
             message += "-Air quality is a concern. Consider wearing a mask, especially if you have allergies. <br>";
-          } if (weatherData.weather[0].main === "Clouds" || weatherData.weather[0].main === "Mostly cloudy" ){
+          } if (weatherData.weather[0].main.includes("Clouds")){
             message += "-little cloudy,may be a chance of rain,do hurry. <br>";
           } if (weatherData.weather[0].main === "Rain"){
             message += "-Looks like rain! Don't forget your umbrella. <br>";
+          } if (humidity >80) {
+            message += "-It's very humid. be prepared for a muggy day. <br>"  
+        
           } if (message.length === 0) {
             message += "-Everything seems to be fine, Enjoy the day.";
           }
@@ -182,6 +185,7 @@
 </body>
 
 </html>
+
 
 
 
