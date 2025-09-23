@@ -21,7 +21,7 @@ body{
     width: 100%;
     justify-content: space-between;
     margin-top: 7px;
-    background-image: url(Images/sky-with-cloud.jpg);
+    background-image: url(Images/day.jpg);
 }
 img{
     height: 50px;
@@ -199,6 +199,7 @@ img{
          
     }
 }
+
 
 
 
