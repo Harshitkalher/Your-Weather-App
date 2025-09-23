@@ -21,7 +21,7 @@ body{
     width: 100%;
     justify-content: space-between;
     margin-top: 7px;
-    background-image: url(Images/day.jpg);
+    background-image: url(Images/day2.jpg);
     background-position: center; /* Centers the background image */
     background-repeat: no-repeat; 
 }
@@ -201,6 +201,7 @@ img{
          
     }
 }
+
 
 
 
